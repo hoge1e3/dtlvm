@@ -1,0 +1,31 @@
+<script src="js/lib/require.js"></script>
+<script src="js/lib/jquery-1.12.1.js"></script>
+<script src="js/reqConf.js"></script>
+<script>
+    requirejs.config(reqConf);
+    requirejs(["vmdemo"],function (demo){
+        var prog=$("#prog");
+        var runb=$("#run");
+        var out=$("#result");
+        var code=$("#code");
+        runb.click(function () {
+            demo.run(prog.val()).then(function (res) {
+                console.log(res);
+                code.text(JSON.stringify(res.code,null,null));
+            },function (res) {
+                console.error(res);
+                out.text(res);
+            }).catch(function (res) {
+                console.error(res);
+            });
+        });
+    });
+</script>
+<textarea id="prog" rows=5 cols=40>
+a=root! create.
+</textarea>
+<button id="run">Run</button><br/>
+<h1>VM code</h1>
+<pre id="code"></pre>
+<h1>Result</h1>
+<pre id="result"></pre>

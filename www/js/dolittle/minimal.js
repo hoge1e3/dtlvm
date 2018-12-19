@@ -386,7 +386,7 @@ MinimalParser= function () {
 		var output="";
 		var line=1;
 		ctx=context();
-		ctx.usegen=AsyncByGenerator.supportsGenerator && input.indexOf("NOGENERATOR")<0;
+		ctx.usegen=typeof AsyncByGenerator!=="undefined" && AsyncByGenerator.supportsGenerator && input.indexOf("NOGENERATOR")<0;
 
 	    //console.log("INP",input,input.length);
 		var result = program.parseStr(input);
