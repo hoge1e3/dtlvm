@@ -6,26 +6,43 @@
     requirejs(["vmdemo"],function (demo){
         var prog=$("#prog");
         var runb=$("#run");
+        var runvb=$("#runv");
         var out=$("#result");
         var code=$("#code");
         runb.click(function () {
-            demo.run(prog.val()).then(function (res) {
-                console.log(res);
-                code.text(JSON.stringify(res.code,null,null));
+            var vmc=demo.compile(prog.val());
+            console.log("code",vmc);
+            code.val(JSON.stringify(vmc,null,null));
+            runv(vmc);
+        });
+        runvb.click(function () {
+            var vmc=JSON.parse(code.val());
+            runv(vmc);
+        });
+        function runv(vmc) {
+            demo.run(vmc).then(function (res) {
+                out.text(JSON.stringify(res));
+                console.log("result",res);
             },function (res) {
-                console.error(res);
-                out.text(res);
+                console.error("error",res);
+                out.text(res.responseText||res);
             }).catch(function (res) {
                 console.error(res);
             });
-        });
+        }
     });
 </script>
-<textarea id="prog" rows=5 cols=40>
+<textarea id="prog" rows=10 cols=40>
 a=root! create.
+a:inc=[x=x+4].
+a:x=2.
+[
+    a!inc.
+]! 10 repeat.
 </textarea>
-<button id="run">Run</button><br/>
+<button id="run">Run</button>
 <h1>VM code</h1>
-<pre id="code"></pre>
+<textarea id="code" rows=12 cols=40></textarea>
+<button id="runv">Run VM Code</button>
 <h1>Result</h1>
 <pre id="result"></pre>
